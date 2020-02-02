@@ -206,10 +206,10 @@ class TrueColor:
     def enhance_image(self):
         self.logger.info(f'Process gamma correction: {self.enh_gamma}')
         self._arrays['rgb'] = self._arrays['rgb'] ** self.enh_gamma
-        data = np.array(self._arrays['rgb'] * 255).astype('uint8')
-        data = np.clip(data, 0, 255)
-        self.image = Image.fromarray(data, 'RGB')
-        del data, self._arrays['rgb']
+        self._arrays['rgb'] = np.array(self._arrays['rgb'] * 255).astype('uint8')
+        self._arrays['rgb'] = np.clip(self._arrays['rgb'], 0, 255)
+        self.image = Image.fromarray(self._arrays['rgb'], 'RGB')
+        del self._arrays['rgb']
         self.logger.info(f'Process color enhancement: {self.enh_color}')
         converter = ImageEnhance.Color(self.image)
         self.image = converter.enhance(self.enh_color)
