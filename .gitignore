@@ -1,2 +1,6 @@
 data/
 __pycache__/
+lut/*.tgz
+lut/*.h5
+lut/*MCA
+*.png

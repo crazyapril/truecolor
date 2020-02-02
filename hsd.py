@@ -339,13 +339,19 @@ class MutilSegmentHimawariFormat(HimawariFormat):
             raws = da.concatenate(raws)
         return self.calibration(raws)
 
-    def get_geocoord(self, vline=None, vcol=None):
-        self.modify_metadata(vline, vcol)
+    def get_geocoord(self, vline=None, vcol=None, aline=None, acol=None):
+        self.modify_metadata(vline=vline, vcol=vcol, aline=aline, acol=acol)
         return self.get_lonlat()
 
-    def modify_metadata(self, vline, vcol):
+    def modify_metadata(self, vline=None, vcol=None, aline=None, acol=None):
         """Modify meta data to generate full lon/lat coordinates at one time."""
-        self.first_lineno = int(self.lines * vline[0] * 10)
-        self.lines = int(self.lines * 10 * vline[1]) - int(self.lines * 10 * vline[0])
-        self.first_colno = int(self.columns * vcol[0])
-        self.columns = int(self.columns * vcol[1]) - int(self.columns * vcol[0])
+        if aline is None:
+            self.first_lineno = int(self.lines * vline[0] * 10)
+            self.lines = int(self.lines * 10 * vline[1]) - int(self.lines * 10 * vline[0])
+            self.first_colno = int(self.columns * vcol[0])
+            self.columns = int(self.columns * vcol[1]) - int(self.columns * vcol[0])
+        else:
+            self.first_lineno = aline[0]
+            self.lines = aline[1] - aline[0]
+            self.first_colno = acol[0]
+            self.columns = acol[1] - acol[0]

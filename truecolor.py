@@ -113,23 +113,25 @@ class TrueColor:
         hf = self.get_hf(1)
         raw = hf.extract(vline=self.vlines, vcol=self.vcols)
         self._arrays['b'] = raw
-        lons, lats = hf.get_geocoord(vline=self.vlines, vcol=self.vcols)
+        aline = hf.linenos
+        acol = hf.colnos
+        lons, lats = hf.get_geocoord(aline=aline, acol=acol)
         self._arrays['lons'] = lons
         self._arrays['lats'] = lats
         # Green
         # = 0.85 * Band2 + 0.15 * Band4
         self.logger.info('Extract green channel...')
         hf = self.get_hf(2)
-        raw = hf.extract(vline=self.vlines, vcol=self.vcols)
+        raw = hf.extract(aline=aline, acol=acol)
         self._arrays['g'] = raw
         self.logger.info('Extract nir channel (Band 04)...')
         hf = self.get_hf(4)
-        raw = hf.extract(vline=self.vlines, vcol=self.vcols)
+        raw = hf.extract(aline=aline, acol=acol)
         self._arrays['g4'] = raw
         # Red = Band3
         self.logger.info('Extract red channel...')
-        aline = hf.linenos[0] * 2, hf.linenos[1] * 2
-        acol = hf.colnos[0] * 2, hf.colnos[1] * 2
+        aline = aline[0] * 2, aline[1] * 2
+        acol = acol[0] * 2, acol[1] * 2
         hf = self.get_hf(3)
         raw = hf.extract(aline=aline, acol=acol)
         # Downsample by 2×2 mean, hack!
